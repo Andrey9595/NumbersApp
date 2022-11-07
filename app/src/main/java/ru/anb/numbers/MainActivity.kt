@@ -11,7 +11,7 @@ import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
     companion object {
-         const val KEY: String = "number"
+         const val KEY: String = "EXTRA_NUMBER_KEY"
     }
     private var mainNumber = 101
     private lateinit var adapter: NumbersAdapter
@@ -27,8 +27,6 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = GridLayoutManager(this, numberOfColums)
         if (savedInstanceState != null) {
             with(savedInstanceState) {
-
-                //TODO: Переменную number вынести в const val
                 mainNumber = getInt(KEY) + 1
             }
         }
@@ -37,8 +35,7 @@ class MainActivity : AppCompatActivity() {
             result ?: return@registerForActivityResult
         }
 
-        //TODO: Используй лямду функцию
-        val obClass = NumbersClicked { number -> newNumberContract.launch(number) }
+        val obClass =  { number: Numbers -> newNumberContract.launch(number) }
 //        val obClass = object : NumbersClicked  { number: Numbers -> newNumberContract.launch(number) }
 
         adapter = NumbersAdapter(numbers, obClass)

@@ -11,8 +11,14 @@ class ThedActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.show_activity)
         val numberShowView = intent.getParcelableExtra<Numbers>(Intent.EXTRA_TEXT)
-        val showActivity: TextView = findViewById(R.id.thed_text)
-        showActivity.setText(numberShowView!!.number.toString())
-        showActivity.setTextColor(numberShowView.color)
+        val numberTextView: TextView = findViewById(R.id.thed_text)
+        numberTextView.text = numberShowView!!.number.toString()
+        numberTextView.setTextColor(numberShowView.color)
     }
 }
+
+////
+//  JAVA: int a;
+//  Kotlin: val a: Int = 0
+/////
+

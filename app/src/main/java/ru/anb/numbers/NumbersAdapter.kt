@@ -7,8 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-//TODO: вместо интерфейса используй тип лямбды
-class NumbersAdapter(private val numbers: ArrayList<Numbers>, private val clicked: NumbersClicked) :
+class NumbersAdapter(private val numbers: ArrayList<Numbers>, private val clicked: (Numbers) -> Unit) :
     RecyclerView.Adapter<NumbersAdapter.NumbersViewHolder>() {
 
     class NumbersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -29,7 +28,7 @@ class NumbersAdapter(private val numbers: ArrayList<Numbers>, private val clicke
         val items = numbers[position]
         holder.numberTextView.text = items.number.toString()
         holder.numberTextView.setOnClickListener {
-            clicked.onNumberCliced(items)
+            clicked(items)
         }
     }
 
