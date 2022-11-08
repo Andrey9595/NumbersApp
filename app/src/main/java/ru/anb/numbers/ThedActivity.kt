@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
-//TODO: Названия
+
 class ThedActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,9 +16,4 @@ class ThedActivity: AppCompatActivity() {
         numberTextView.setTextColor(numberShowView.color)
     }
 }
-
-////
-//  JAVA: int a;
-//  Kotlin: val a: Int = 0
-/////
 
