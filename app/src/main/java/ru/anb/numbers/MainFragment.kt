@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlin.properties.Delegates
@@ -43,11 +44,14 @@ class MainFragment : Fragment() {
             }
         }
         val numbers = fetchData()
-        val newNumberContract = registerForActivityResult(NewPostContract()) { result ->
-            result ?: return@registerForActivityResult
+        val obClass:(Numbers)->Unit =  { number : Numbers ->
+            run {
+                val bundle = bundleOf(KEY to number)
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_view, OwnNumberFragment.newInstance(bundle)).addToBackStack(null)
+                    .commit()
+            }
         }
-
-        val obClass =  { number : Numbers -> newNumberContract.launch(number) }
 
 
         adapter = NumbersAdapter(numbers, obClass)
