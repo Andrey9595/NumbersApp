@@ -10,7 +10,6 @@ import android.widget.TextView
 import ru.anb.numbers.MainFragment.Companion.KEY
 
 
-
 class OwnNumberFragment : Fragment() {
 
     override fun onCreateView(
@@ -29,8 +28,8 @@ class OwnNumberFragment : Fragment() {
             textV.text = it.number.toString()
             textV.setTextColor(it.color)
         }
-    }
 
+    }
 
     companion object {
         fun newInstance(bundle: Bundle?) = OwnNumberFragment().apply {

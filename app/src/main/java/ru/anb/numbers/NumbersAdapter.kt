@@ -1,5 +1,6 @@
 package ru.anb.numbers
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -7,8 +8,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class NumbersAdapter(private val numbers: ArrayList<Numbers>, private val clicked: (Numbers) -> Unit) :
+class NumbersAdapter(private val clicked: (Numbers) -> Unit) :
     RecyclerView.Adapter<NumbersAdapter.NumbersViewHolder>() {
+
+    private val numbers = mutableListOf<Numbers>()
 
     class NumbersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var numberTextView: TextView = itemView.findViewById(R.id.text)
@@ -32,6 +35,13 @@ class NumbersAdapter(private val numbers: ArrayList<Numbers>, private val clicke
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun setData(data: List<Numbers>) {
+        numbers.clear()
+        numbers.addAll(data)
+        notifyDataSetChanged()
+    }
+
     fun insertNumber() {
         val numbers1 = Numbers(numbers.size + 1)
         numbers.add(numbers1)
@@ -39,7 +49,6 @@ class NumbersAdapter(private val numbers: ArrayList<Numbers>, private val clicke
     }
 
     fun removedNumber() {
-        numbers.removeLast()
         notifyItemRemoved(numbers.size)
     }
 

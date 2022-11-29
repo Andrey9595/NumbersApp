@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.os.bundleOf
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlin.properties.Delegates
@@ -17,10 +18,11 @@ class MainFragment : Fragment() {
     companion object {
         const val KEY: String = "number"
     }
-    private var mainNumber = 101
+
     private lateinit var adapter: NumbersAdapter
     private var numberOfColums by Delegates.notNull<Int>()
-
+    private val dataModel: DataModel by viewModels()
+    private var numbers = mutableListOf<Numbers>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,44 +39,42 @@ class MainFragment : Fragment() {
         else
             numberOfColums = 4
         recyclerView.layoutManager = GridLayoutManager(context, numberOfColums)
-        if (savedInstanceState != null) {
-            with(savedInstanceState) {
 
-                mainNumber = getInt(KEY) + 1
-            }
-        }
-        val numbers = fetchData()
-        val obClass:(Numbers)->Unit =  { number : Numbers ->
+        val obClass: (Numbers) -> Unit = { number: Numbers ->
             run {
                 val bundle = bundleOf(KEY to number)
                 parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container_view, OwnNumberFragment.newInstance(bundle)).addToBackStack(null)
+                    .replace(R.id.fragment_container_view, OwnNumberFragment.newInstance(bundle))
+                    .addToBackStack(null)
                     .commit()
             }
         }
 
 
-        adapter = NumbersAdapter(numbers, obClass)
+
+        adapter = NumbersAdapter(obClass)
         recyclerView.adapter = adapter
         val button: Button = view.findViewById(R.id.buttonPlus)
         button.setOnClickListener {
-            adapter.itemCount + 1
             adapter.insertNumber()
+            dataModel.addNumbers(adapter.itemCount + 1)
+
         }
         val buttonMinus: Button = view.findViewById(R.id.buttonMinus)
-        buttonMinus.setOnClickListener{
-            adapter.itemCount - 1
+        buttonMinus.setOnClickListener {
             adapter.removedNumber()
+            dataModel.removeNubers(
+                adapter.itemCount
+            )
+        }
+
+        dataModel.data.observe(viewLifecycleOwner) { size ->
+            numbers = fetchData(size)
+            adapter.setData(numbers)
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putInt(KEY, adapter.itemCount)
-
-    }
-
-    private fun fetchData(): ArrayList<Numbers> {
+    private fun fetchData(mainNumber: Int): ArrayList<Numbers> {
         val list = ArrayList<Numbers>()
         for (i in 1 until mainNumber) {
             val numberFetchData = Numbers(i)
@@ -82,5 +82,5 @@ class MainFragment : Fragment() {
         }
         return list
     }
-    }
+}
 
